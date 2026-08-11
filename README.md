@@ -215,7 +215,7 @@ cooldown = 5
 | `event`    | Yes      | Event name (see table below)                                                                                                           |
 | `script`   | Yes      | Shell command to run                                                                                                                   |
 | `enabled`  | Yes      | `true` or `false`                                                                                                                      |
-| `cooldown` | No       | Minimum seconds between firings (default: 0). Prevents the same script from running repeatedly if the event fires in quick succession. |
+| `cooldown` | No       | Minimum seconds between firings (default: 0). Prevents a rule from running repeatedly if the event fires in quick succession. Tracked per event, so two events can share one script without sharing a cooldown. |
 | `battery`  | No       | For `BatteryLevel` only: fire when battery <= this % (default: 20)                                                                     |
 
 ### Available events

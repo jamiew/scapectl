@@ -29,7 +29,7 @@ import (
 type Runner struct {
 	cfg      *config.Config
 	mu       sync.Mutex
-	lastFire map[string]time.Time // label → last fire time (for cooldown)
+	lastFire map[string]time.Time // event+script → last fire time (for cooldown)
 }
 
 // New creates a trigger runner with the given config.
@@ -95,16 +95,18 @@ func (r *Runner) dispatch(evt monitor.Event) {
 			}
 		}
 
-		// Cooldown: skip if fired too recently
+		// Cooldown: skip if fired too recently. Keyed by event+script so two
+		// events sharing one script don't share a cooldown.
 		if rule.Cooldown > 0 {
+			key := rule.Event + "\x00" + rule.Script
 			r.mu.Lock()
-			last, exists := r.lastFire[rule.Script]
+			last, exists := r.lastFire[key]
 			cooldownDur := time.Duration(rule.Cooldown) * time.Second
 			if exists && time.Since(last) < cooldownDur {
 				r.mu.Unlock()
 				continue
 			}
-			r.lastFire[rule.Script] = time.Now()
+			r.lastFire[key] = time.Now()
 			r.mu.Unlock()
 		}
 
