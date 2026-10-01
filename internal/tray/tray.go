@@ -660,15 +660,18 @@ func (a *App) reloadConfig() {
 func (a *App) setIconState(state string) {
 	a.mu.Lock()
 	from := a.iconState
+	if from == state {
+		// Every status poll lands here. Bumping animSeq now would cancel
+		// the transition that the same poll's power-on event just started.
+		a.mu.Unlock()
+		return
+	}
 	a.iconState = state
 	a.animSeq++
 	seq := a.animSeq
 	mode := effectiveMode(a.cfg.Settings.TrayDisplay)
 	set := a.cfg.Settings.TrayIconSet
 	a.mu.Unlock()
-	if from == state {
-		return
-	}
 	if runtime.GOOS != "darwin" || mode != "icon" {
 		a.applyDisplay()
 		return
