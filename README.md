@@ -276,7 +276,7 @@ enabled  = true
 cooldown = 1
 ```
 
-The helper reads `SCAPE_EQ_DATA` and `SCAPE_EQ_SLOT` from its environment. It can render a PNG with ImageMagick and display it with [alerter](https://github.com/vjeantet/alerter): `alerter --title Scape --message "EQ slot $SCAPE_EQ_SLOT" --content-image "$image" --timeout 3`. Keep the image until alerter exits. These tools and the helper are separate from scapectl; use absolute tool paths for launch-at-login.
+The helper reads `SCAPE_EQ_DATA` and `SCAPE_EQ_SLOT` from its environment. It can render a PNG with ImageMagick and display it with [terminal-notifier](https://github.com/julienXX/terminal-notifier): `terminal-notifier -title Scape -message "EQ slot $SCAPE_EQ_SLOT" -contentImage "$image"`. These tools and the helper are separate from scapectl; use absolute tool paths for launch-at-login.
 
 ### CLI
 
